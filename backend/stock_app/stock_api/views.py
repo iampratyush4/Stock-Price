@@ -10,13 +10,15 @@ from django.views.decorators.http import require_POST
 
 @method_decorator(csrf_exempt, name='dispatch')
 class StockListView(View):
-    @require_POST
+    @method_decorator(csrf_exempt, name='dispatch')
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         try:
             n = int(request.POST.get('n', 0))
+            print(f"Received number of stocks: {n}")  # Add this line for logging
+
             if n <= 0:
                 return JsonResponse({'error': 'Invalid input for n'})
 
@@ -32,7 +34,7 @@ class StockListView(View):
             with open('stocks.json', 'w') as file:
                 json.dump(stocks, file)
 
-            return JsonResponse({'message': 'Stocks fetched and saved successfully'})
+            return JsonResponse({'stocks': stocks})
         except Exception as e:
             return JsonResponse({'error': str(e)})
 

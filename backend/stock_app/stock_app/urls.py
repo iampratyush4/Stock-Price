@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from stock_api.views import StockListView
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('stocks/', StockListView.as_view(), name='stock-list'),
+    # Add other URL patterns as needed
 ]
