@@ -18,7 +18,7 @@ class StockListView(View):
         try:
             n = int(request.POST.get('n', 0))
             print(f"Received number of stocks: {n}")  # Add this line for logging
-
+            
             if n <= 0:
                 return JsonResponse({'error': 'Invalid input for n'})
 
@@ -29,7 +29,7 @@ class StockListView(View):
             # Add refreshInterval to each stock
             for stock in stocks:
                 stock['refreshInterval'] = random.randint(1, 5)
-
+                
             # Store stock data in a file (e.g., stocks.json)
             with open('stocks.json', 'w') as file:
                 json.dump(stocks, file)
@@ -37,6 +37,31 @@ class StockListView(View):
             return JsonResponse({'stocks': stocks})
         except Exception as e:
             return JsonResponse({'error': str(e)})
+    def get(self, request, *args, **kwargs):
+        # Handle GET requests (if needed)
+        try:
+            n = int(request.POST.get('n', 0))
+            print(f"Received number of stocks: {n}")  # Add this line for logging
+            
+            if n <= 0:
+                return JsonResponse({'error': 'Invalid input for n'})
+
+            # Fetch n stocks from Polygon API
+            polygon_api_key = '4FPAmNwQcdi9ErtGYTMFQop0gsvOSTY2'
+            stocks = self.fetch_stocks(n, polygon_api_key)
+
+            # Add refreshInterval to each stock
+            for stock in stocks:
+                stock['refreshInterval'] = random.randint(1, 5)
+                
+            # Store stock data in a file (e.g., stocks.json)
+            with open('stocks.json', 'w') as file:
+                json.dump(stocks, file)
+
+            return JsonResponse({'stocks': stocks})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+        # return JsonResponse({'message': 'GET request handled'})
 
     def fetch_stocks(self, n, api_key):
         # Implement logic to fetch n stocks from Polygon API

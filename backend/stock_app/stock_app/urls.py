@@ -15,11 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import path
 from stock_api.views import StockListView
 
 
 urlpatterns = [
     path('stocks/', StockListView.as_view(), name='stock-list'),
+        path('', lambda request: JsonResponse({'message': 'Welcome to the Stock API'}), name='welcome'),
+
     # Add other URL patterns as needed
 ]
